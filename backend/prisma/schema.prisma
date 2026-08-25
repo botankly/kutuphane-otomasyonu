@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// ------------------------------------
+// MODELS
+// ------------------------------------
+
+model User {
+  id                    String                 @id @default(uuid())
+  email                 String                 @unique
+  passwordHash          String
+  fullName              String
+  role                  String                 @default("MEMBER") // ADMIN, LIBRARIAN, MEMBER
+  isActive              Boolean                @default(true)     // Account status: true=Aktif, false=Askıda/Pasif
+  phone                 String?
+  department            String?
+  avatarUrl             String?
+  emailNotifications    Boolean                @default(true)
+  loans                 Loan[]
+  reservations          Reservation[]
+  deskReservations      DeskReservation[]
+  studyRoomReservations StudyRoomReservation[]
+  notifications         Notification[]
+  reviews               Review[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+
+  @@map("users")
+}
+
+model Book {
+  id              String        @id @default(uuid())
+  title           String
+  isbn            String        @unique
+  author          String
+  publisher       String
+  category        String
+  totalCopies     Int           @default(1)
+  availableCopies Int           @default(1)
+  locationShelf   String
+  coverUrl        String?
+  pdfUrl          String?       @default("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
+  description     String?
+  loans           Loan[]
+  reservations    Reservation[]
+  reviews         Review[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("books")
+}
+
+model Loan {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookId     String
+  book       Book      @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  issueDate  DateTime  @default(now())
+  dueDate    DateTime
+  returnDate DateTime?
+  status     String    @default("ACTIVE") // ACTIVE, OVERDUE, RETURNED
+  fineAmount Float     @default(0.0)
+  isPaid     Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@map("loans")
+}
+
+model Reservation {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookId     String
+  book       Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  reservedAt DateTime @default(now())
+  status     String   @default("WAITING") // WAITING, FULFILLED, CANCELLED
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("reservations")
+}
+
+model Room {
+  id          String   @id @default(uuid())
+  name        String
+  capacity    Int      @default(10)
+  description String?
+  desks       Desk[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("rooms")
+}
+
+model Desk {
+  id               String            @id @default(uuid())
+  roomId           String
+  room             Room              @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  deskNumber       String
+  xPosition        Int               @default(0) // Grid X coordinate (col)
+  yPosition        Int               @default(0) // Grid Y coordinate (row)
+  isAvailable      Boolean           @default(true)
+  hasPowerOutlet   Boolean           @default(true)
+  deskReservations DeskReservation[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@map("desks")
+}
+
+model DeskReservation {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deskId          String
+  desk            Desk     @relation(fields: [deskId], references: [id], onDelete: Cascade)
+  reservationDate DateTime
+  startTime       String   // e.g. "09:00"
+  endTime         String   // e.g. "12:00"
+  status          String   @default("ACTIVE") // ACTIVE, CANCELLED, COMPLETED
+  isCheckedIn     Boolean  @default(false)    // QR Check-in status: true=Masada Oturuyor, false=Oturmuyor
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("desk_reservations")
+}
+
+model StudyRoom {
+  id                    String                 @id @default(uuid())
+  name                  String
+  capacity              Int                    @default(6)
+  description           String?
+  equipment             String?                @default("Akıllı Tahta, Projeksiyon, 6 Priz, Yüksek Hızlı Wi-Fi")
+  imageUrl              String?
+  isAvailable           Boolean                @default(true)
+  studyRoomReservations StudyRoomReservation[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+
+  @@map("study_rooms")
+}
+
+model StudyRoomReservation {
+  id               String    @id @default(uuid())
+  studyRoomId      String
+  studyRoom        StudyRoom @relation(fields: [studyRoomId], references: [id], onDelete: Cascade)
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reservationDate  DateTime
+  startTime        String    // e.g. "10:00"
+  endTime          String    // e.g. "12:00"
+  durationHours    Int       @default(2)
+  participantCount Int       @default(4)
+  groupEmails      String?   // Comma separated student emails
+  purpose          String?   // e.g. "Bitirme Projesi Çalışması"
+  status           String    @default("ACTIVE") // ACTIVE, CANCELLED, COMPLETED
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@map("study_room_reservations")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   @default("INFO") // INFO, LOAN, RESERVATION, WELCOME
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("notifications")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookId    String
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  rating    Int      @default(5) // 1 to 5
+  comment   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reviews")
+}
