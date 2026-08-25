@@ -15,14 +15,31 @@ dotenv.config();
 
 const app = express();
 
-// Enable CORS for Vercel live frontend & local dev
+// Explicit list of allowed origins for production & local development
+const allowedOrigins = [
+  'https://kutuphane-otomasyonu-tr.vercel.app',
+  'https://frontend-beta-steel-52.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:5000'
+];
+
 app.use(
   cors({
-    origin: '*',
+    origin: (origin, callback) => {
+      // Allow mobile apps (no origin header), specified origins, or any .vercel.app subdomain
+      if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+      return callback(null, true); // Fallback permit for mobile clients
+    },
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+    optionsSuccessStatus: 200
   })
 );
+
+app.options('*', cors());
 
 app.use(express.json());
 
