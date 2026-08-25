@@ -128,10 +128,10 @@ export default function MyCardPage() {
                 {/* MEMBER DETAILS */}
                 <div className="space-y-1">
                   <h2 className="text-lg font-extrabold text-white tracking-tight leading-snug">
-                    {user?.fullName || 'Ahmet Yılmaz'}
+                    {user?.fullName || user?.email || 'Kayıtlı Üye'}
                   </h2>
                   <p className="text-[11px] text-slate-300 font-medium flex items-center gap-1">
-                    <Mail className="w-3 h-3 text-slate-400" /> {user?.email || 'üye@kutuphane.com'}
+                    <Mail className="w-3 h-3 text-slate-400" /> {user?.email || '-'}
                   </p>
                   {user?.department && (
                     <p className="text-[10px] text-slate-300 font-semibold truncate max-w-[200px]">

@@ -1105,7 +1105,7 @@ export default function DeskReservationPage() {
             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col items-center justify-center space-y-3">
               <img
                 src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
-                  `http://localhost:3000/check-in?reservationId=${selectedQrRes.id}`
+                  `${typeof window !== 'undefined' ? window.location.origin : ''}/check-in?reservationId=${selectedQrRes.id}`
                 )}`}
                 alt="Masa Check-In QR Kodu"
                 className="w-48 h-48 rounded-xl shadow-md border-4 border-white bg-white"
