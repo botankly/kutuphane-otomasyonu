@@ -292,10 +292,10 @@ export const sendPasswordResetEmail = async (
       html: htmlContent
     });
 
-    console.log(`✅ Şifre sıfırlama e-postası gönderildi: ${info.messageId} | Alıcı: ${toEmail}`);
+    console.log(`✅ Şifre sıfırlama e-postası başarıyla gönderildi: ${info.messageId} | Alıcı: ${toEmail}`);
     return true;
   } catch (error: any) {
     console.error(`❌ Şifre Sıfırlama Email Hatası (${toEmail}):`, error.message || error);
-    return false;
+    throw error;
   }
 };
