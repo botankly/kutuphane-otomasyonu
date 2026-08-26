@@ -15,13 +15,19 @@ dotenv.config();
 
 const app = express();
 
-// Exact CORS configuration for production Vercel frontend & local development
+// Comprehensive CORS configuration for production Vercel frontend & local development ports (3000, 3001, 5000)
 app.use(
   cors({
-    origin: ['https://kutuphane-otomasyonu-tr.vercel.app', 'http://localhost:3000'],
+    origin: [
+      'https://kutuphane-otomasyonu-tr.vercel.app',
+      'https://frontend-beta-steel-52.vercel.app',
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:5000'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
   })
 );
 

@@ -3,57 +3,64 @@ import fs from 'fs';
 import path from 'path';
 import bcrypt from 'bcryptjs';
 
-// Vercel Serverless environment file system handling
+// Vercel Serverless & Local SQLite File Handling Fallback
 if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
-  const tmpDbPath = '/tmp/dev.db';
-  if (!fs.existsSync(tmpDbPath)) {
-    console.log('📦 Vercel Serverless ortamı algılandı. SQLite veritabanı /tmp/dev.db klasörüne kopyalanıyor...');
-    try {
-      // Look for existing dev.db bundled with deployment
-      const potentialDbPaths = [
-        path.join(process.cwd(), 'prisma', 'dev.db'),
-        path.join(process.cwd(), 'dev.db'),
-        path.join(__dirname, '..', '..', 'prisma', 'dev.db'),
-        path.join(__dirname, '..', '..', 'dev.db')
-      ];
-
-      let dbCopied = false;
-      for (const p of potentialDbPaths) {
-        if (fs.existsSync(p)) {
-          fs.copyFileSync(p, tmpDbPath);
-          console.log(`✅ SQLite veritabanı (${p}) -> ${tmpDbPath} kopyalandı.`);
-          dbCopied = true;
-          break;
+  if (!process.env.DATABASE_URL || process.env.DATABASE_URL.startsWith('file:')) {
+    const tmpDbPath = '/tmp/dev.db';
+    if (!fs.existsSync(tmpDbPath)) {
+      try {
+        const potentialDbPaths = [
+          path.join(process.cwd(), 'prisma', 'dev.db'),
+          path.join(process.cwd(), 'dev.db'),
+          path.join(__dirname, '..', '..', 'prisma', 'dev.db'),
+          path.join(__dirname, '..', '..', 'dev.db')
+        ];
+        let copied = false;
+        for (const p of potentialDbPaths) {
+          if (fs.existsSync(p)) {
+            fs.copyFileSync(p, tmpDbPath);
+            copied = true;
+            break;
+          }
         }
+        if (!copied) {
+          fs.writeFileSync(tmpDbPath, '');
+        }
+      } catch (e) {
+        console.error('SQLite /tmp handler notice:', e);
       }
-
-      if (!dbCopied) {
-        fs.writeFileSync(tmpDbPath, '');
-        console.log('ℹ️ Yeni boş SQLite veritabanı /tmp/dev.db üzerinde oluşturuldu.');
-      }
-    } catch (e) {
-      console.error('⚠️ /tmp/dev.db oluşturulurken uyarı:', e);
     }
+    process.env.DATABASE_URL = `file:${tmpDbPath}`;
   }
-  process.env.DATABASE_URL = `file:${tmpDbPath}`;
 } else if (!process.env.DATABASE_URL) {
   process.env.DATABASE_URL = 'file:./dev.db';
 }
 
-const prisma = new PrismaClient({
-  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error']
-});
+// Singleton Pattern to prevent Prisma Connection Pool Exhaustion on Vercel Serverless Cold Starts
+declare global {
+  var prismaGlobal: PrismaClient | undefined;
+}
+
+const prisma =
+  globalThis.prismaGlobal ??
+  new PrismaClient({
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error']
+  });
+
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.prismaGlobal = prisma;
+}
 
 /**
- * Ensures default seed users (Admin, Librarian, Member) exist in the database.
- * Executes automatically during login/register if database is fresh/empty.
+ * Ensures default seed users (Admin, Librarian, Member, Botan) exist in database.
+ * Executes automatically during login/register if database is empty.
  */
 export const ensureSeedUsersExist = async (): Promise<void> => {
   try {
     const userCount = await prisma.user.count();
     if (userCount > 0) return;
 
-    console.log('🌱 Veritabanında kullanıcı bulunamadı. Otomatik Seed (Admin/Öğrenci) çalıştırılıyor...');
+    console.log('🌱 Veritabanı boş. Sunum için varsayılan kullanıcılar oluşturuluyor...');
 
     const adminPassword = await bcrypt.hash('admin123', 10);
     const librarianPassword = await bcrypt.hash('librarian123', 10);
@@ -101,9 +108,9 @@ export const ensureSeedUsersExist = async (): Promise<void> => {
       });
     }
 
-    console.log('✅ Otomatik seed tamamlandı. 4 varsayılan kullanıcı hazır.');
+    console.log('✅ Seed tamamlandı: admin@kutuphane.com, member@kutuphane.com, botankulay1@gmail.com hazır.');
   } catch (err) {
-    console.error('⚠️ Auto-seed sırasında uyarı:', err);
+    console.error('⚠️ Auto-seed sırasında hata:', err);
   }
 };
 
