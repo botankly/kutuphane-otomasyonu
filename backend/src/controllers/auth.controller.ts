@@ -3,7 +3,8 @@ import { Role } from '../types/roles';
 import prisma, { ensureSeedUsersExist } from '../config/prisma';
 import { hashPassword, comparePassword } from '../utils/password.util';
 import { generateToken } from '../utils/jwt.util';
-import { sendRegistrationEmail } from '../services/emailService';
+import crypto from 'crypto';
+import { sendRegistrationEmail, sendPasswordResetEmail } from '../services/emailService';
 import { createNotification } from './notification.controller';
 
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -291,6 +292,108 @@ export const changePassword = async (req: Request, res: Response): Promise<void>
     res.status(500).json({
       status: 'error',
       message: 'Şifre değiştirilirken bir hata oluştu.',
+      error: error.message
+    });
+  }
+};
+
+export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      res.status(400).json({ status: 'error', message: 'E-posta adresi zorunludur.' });
+      return;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (!user) {
+      res.status(200).json({
+        status: 'success',
+        message: 'Eğer bu e-posta sistemde kayıtlıysa, şifre sıfırlama bağlantısı gönderilmiştir.'
+      });
+      return;
+    }
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires = new Date(Date.now() + 3600000); // 1 hour validity
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        resetPasswordToken: token,
+        resetPasswordExpires: expires
+      }
+    });
+
+    const frontendUrl = process.env.FRONTEND_URL || 'https://kutuphane-otomasyonu-tr.vercel.app';
+    const resetUrl = `${frontendUrl}/reset-password?token=${token}`;
+
+    await sendPasswordResetEmail(user.email, resetUrl);
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Şifre sıfırlama bağlantısı e-posta adresinize gönderilmiştir.'
+    });
+  } catch (error: any) {
+    console.error('FORGOT PASSWORD ERROR:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Şifre sıfırlama talebi işlenirken sunucu hatası oluştu.',
+      error: error.message
+    });
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      res.status(400).json({ status: 'error', message: 'Token ve yeni şifre alanları zorunludur.' });
+      return;
+    }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        resetPasswordToken: token,
+        resetPasswordExpires: {
+          gt: new Date()
+        }
+      }
+    });
+
+    if (!user) {
+      res.status(400).json({
+        status: 'error',
+        message: 'Şifre sıfırlama bağlantısı geçersiz veya süresi dolmuş.'
+      });
+      return;
+    }
+
+    const newPasswordHash = await hashPassword(newPassword);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        passwordHash: newPasswordHash,
+        resetPasswordToken: null,
+        resetPasswordExpires: null
+      }
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Şifreniz başarıyla güncellendi. Giriş yapabilirsiniz.'
+    });
+  } catch (error: any) {
+    console.error('RESET PASSWORD ERROR:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Şifre güncellenirken sunucu hatası oluştu.',
       error: error.message
     });
   }

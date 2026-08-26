@@ -22,6 +22,8 @@ model User {
   department            String?
   avatarUrl             String?
   emailNotifications    Boolean                @default(true)
+  resetPasswordToken    String?
+  resetPasswordExpires  DateTime?
   loans                 Loan[]
   reservations          Reservation[]
   deskReservations      DeskReservation[]

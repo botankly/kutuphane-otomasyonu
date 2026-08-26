@@ -242,3 +242,60 @@ export const sendReservationEmail = async (
     return false;
   }
 };
+
+/**
+ * 5. Şifre Sıfırlama E-postası (Forgot Password / Password Reset Link)
+ */
+export const sendPasswordResetEmail = async (
+  toEmail: string,
+  resetUrl: string
+): Promise<boolean> => {
+  try {
+    const fromUser = process.env.EMAIL_USER || 'botankulay1@gmail.com';
+    const transporter = getTransporter();
+
+    const htmlContent = `
+      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+        <div style="background-color: #0f172a; padding: 24px; text-align: center; color: #ffffff;">
+          <h1 style="margin: 0; font-size: 22px; font-weight: 800; color: #60a5fa;">🔑 Şifre Sıfırlama Talebi</h1>
+          <p style="margin: 6px 0 0 0; font-size: 13px; color: #94a3b8;">Üniversite Kütüphane Bilgi Sistemi</p>
+        </div>
+        
+        <div style="padding: 32px; color: #1e293b; line-height: 1.6;">
+          <h2 style="margin-top: 0; color: #0f172a; font-size: 18px;">Merhaba,</h2>
+          <p>Kütüphane hesabınız için şifre sıfırlama talebinde bulundunuz. Yeni bir şifre belirlemek için aşağıdaki butona tıklayın:</p>
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${resetUrl}" style="display: inline-block; padding: 14px 28px; background-color: #2563eb; color: #ffffff; text-decoration: none; font-weight: 800; font-size: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+              Şifremi Sıfırla &rarr;
+            </a>
+          </div>
+
+          <p style="font-size: 13px; color: #64748b;">Eğer buton çalışmıyorsa aşağıdaki bağlantıyı tarayıcınıza kopyalayabilirsiniz:</p>
+          <p style="font-size: 12px; word-break: break-all; color: #2563eb;"><a href="${resetUrl}">${resetUrl}</a></p>
+          
+          <div style="background-color: #fff1f2; border-left: 4px solid #f43f5e; padding: 12px 16px; margin: 24px 0; border-radius: 6px;">
+            <p style="margin: 0; font-size: 12px; color: #be123c;">⚠️ Bu bağlantı <strong>1 saat</strong> süreyle geçerlidir. Talebi siz yapmadıysanız bu e-postayı dikkate almayınız.</p>
+          </div>
+        </div>
+        
+        <div style="background-color: #f1f5f9; padding: 16px; text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0;">
+          © 2026 Üniversite Kütüphane Otomasyon Sistemi. Tüm hakları saklıdır.
+        </div>
+      </div>
+    `;
+
+    const info = await transporter.sendMail({
+      from: `"Kütüphane Otomasyonu" <${fromUser}>`,
+      to: toEmail,
+      subject: '🔑 Kütüphane Hesabı Şifre Sıfırlama Bağlantısı',
+      html: htmlContent
+    });
+
+    console.log(`✅ Şifre sıfırlama e-postası gönderildi: ${info.messageId} | Alıcı: ${toEmail}`);
+    return true;
+  } catch (error: any) {
+    console.error(`❌ Şifre Sıfırlama Email Hatası (${toEmail}):`, error.message || error);
+    return false;
+  }
+};
