@@ -1,11 +1,17 @@
 import axios from 'axios';
 
-const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://kutuphane-backend-alpha.vercel.app/api';
-const API_URL = rawApiUrl.trim().replace(/\/+$/, '');
+let envUrl = process.env.NEXT_PUBLIC_API_URL || 'https://kutuphane-backend-botan3.vercel.app/api';
+envUrl = envUrl.trim().replace(/\/+$/, '');
+
+// Prevent double /api/api pathing or missing /api suffix
+if (!envUrl.endsWith('/api')) {
+  envUrl = `${envUrl}/api`;
+}
+
+const API_URL = envUrl;
 
 const api = axios.create({
   baseURL: API_URL,
-  withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
   }
