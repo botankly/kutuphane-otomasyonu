@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
-import Navbar from '@/components/Navbar';
 import {
   PieChart,
   Pie,
@@ -155,7 +154,6 @@ export default function AdminDashboardPage() {
   if (isLoading || loading) {
     return (
       <div className="min-h-screen bg-slate-50 text-slate-900">
-        <Navbar />
         <div className="flex flex-col items-center justify-center h-[calc(100vh-64px)] gap-4">
           <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
           <p className="text-sm font-semibold text-slate-600">Kurumsal analitik verileri yükleniyor...</p>
@@ -179,7 +177,6 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* TOP BANNER & HEADER - KURUMSAL EKRAN BAŞLIĞI */}
