@@ -259,6 +259,19 @@ export const returnLoan = async (req: Request, res: Response): Promise<void> => 
       return;
     }
 
+    if (!req.user) {
+      res.status(401).json({ status: 'error', message: 'Kullanıcı kimliği doğrulanamadı.' });
+      return;
+    }
+
+    const isStaff = req.user.role === 'ADMIN' || req.user.role === 'LIBRARIAN';
+    const isOwner = loan.userId === req.user.userId;
+
+    if (!isStaff && !isOwner) {
+      res.status(403).json({ status: 'error', message: 'Erişim engellendi. Yalnızca kendi ödünç aldığınız kitapları iade edebilirsiniz.' });
+      return;
+    }
+
     if (loan.status === LoanStatus.RETURNED) {
       res.status(400).json({ status: 'error', message: 'Bu kitap zaten iade edilmiştir.' });
       return;
@@ -297,6 +310,16 @@ export const returnLoan = async (req: Request, res: Response): Promise<void> => 
       });
 
       return updated;
+    });
+
+    // İade bildirimi oluştur
+    await prisma.notification.create({
+      data: {
+        userId: loan.userId,
+        title: 'Kitap Başarıyla İade Edildi 📚',
+        message: `"${loan.book.title}" eseri kütüphaneye başarıyla teslim edilmiştir.`,
+        type: 'LOAN'
+      }
     });
 
     // Rezervasyon sırasındaki kullanıcıya bildirim gönder

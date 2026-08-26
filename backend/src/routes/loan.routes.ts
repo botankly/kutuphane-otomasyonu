@@ -17,9 +17,8 @@ router.get('/my-loans', authenticateToken, getMyLoans);
 router.post('/borrow', authenticateToken, borrowBook);
 router.post('/pay-and-return/:loanId', authenticateToken, payAndReturnLoan);
 
-// Protected Staff routes (ADMIN & LIBRARIAN)
-router.post('/issue', authenticateToken, requireRole(Role.ADMIN, Role.LIBRARIAN), issueLoan);
-router.post('/return/:loanId', authenticateToken, requireRole(Role.ADMIN, Role.LIBRARIAN), returnLoan);
+// Protected return route (ADMIN, LIBRARIAN or MEMBER returning their own loan)
+router.post('/return/:loanId', authenticateToken, returnLoan);
 router.get('/all', authenticateToken, requireRole(Role.ADMIN, Role.LIBRARIAN), getAllLoans);
 
 export default router;
