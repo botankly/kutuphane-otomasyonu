@@ -477,72 +477,72 @@ export default function HomePage() {
         {/* CANLI KÜTÜPHANE DURUMU & İKRAM BİLDİRİM BARI */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 pt-4 border-t border-slate-100">
           {/* LIVE OCCUPANCY PROGRESS BAR CARD (7 Cols) */}
-          <div className="md:col-span-7 bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 shadow-md flex flex-col justify-between relative overflow-hidden group">
+          <div className="md:col-span-7 bg-white text-slate-900 p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between relative overflow-hidden group">
             <div className="flex items-center justify-between z-10">
               <div className="flex items-center gap-2">
                 <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
                 </span>
-                <span className="font-extrabold text-xs tracking-wider text-amber-300 uppercase">
+                <span className="font-extrabold text-xs tracking-wider text-slate-900 uppercase">
                   Canlı Doluluk Oranı
                 </span>
               </div>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold">
                 {liveOccupancy.statusText}
               </span>
             </div>
 
             <div className="my-3 z-10 space-y-2">
               <div className="flex items-baseline justify-between">
-                <div className="text-2xl font-black text-white tracking-tight flex items-baseline gap-2">
+                <div className="text-2xl font-black text-slate-900 tracking-tight flex items-baseline gap-2">
                   %{liveOccupancy.occupancyRate} Dolu
-                  <span className="text-xs font-semibold text-slate-400">
+                  <span className="text-xs font-semibold text-slate-500">
                     ({liveOccupancy.occupiedDesks}/{liveOccupancy.totalDesks} Masa Kullanımda)
                   </span>
                 </div>
-                <span className="text-xs text-emerald-400 font-bold">
+                <span className="text-xs text-blue-600 font-bold">
                   {liveOccupancy.totalDesks - liveOccupancy.occupiedDesks} Boş Masa Var
                 </span>
               </div>
 
               {/* Progress bar */}
-              <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden border border-slate-700 p-0.5">
+              <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200 p-0.5">
                 <div
-                  className="h-full bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 rounded-full transition-all duration-700 shadow-lg"
+                  className="h-full bg-blue-600 rounded-full transition-all duration-700 shadow-sm"
                   style={{ width: `${Math.min(100, liveOccupancy.occupancyRate)}%` }}
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-between text-[11px] text-slate-400 z-10 pt-1">
+            <div className="flex items-center justify-between text-[11px] text-slate-500 z-10 pt-1">
               <span>Zemin + 1. Kat + 2. Kat Salonları</span>
-              <Link href="/desk-reservation" className="text-blue-400 hover:underline font-bold flex items-center gap-1">
+              <Link href="/desk-reservation" className="text-blue-600 hover:underline font-bold flex items-center gap-1">
                 Bireysel Masa Rezerve Et &rarr;
               </Link>
             </div>
           </div>
 
-          {/* NIGHT SHIFT & FREE TREAT CARD (5 Cols) - CORPORATE DARK SLATE STYLING */}
-          <div className="md:col-span-5 bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 shadow-md flex flex-col justify-between relative overflow-hidden">
+          {/* NIGHT SHIFT & FREE TREAT CARD (5 Cols) */}
+          <div className="md:col-span-5 bg-white text-slate-900 p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between relative overflow-hidden">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[10px] font-extrabold uppercase">
+              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-[10px] font-extrabold uppercase">
                 🌙 7/24 Nöbetçi Kütüphane
               </span>
             </div>
 
             <div className="my-2 space-y-1">
-              <h3 className="text-sm font-black text-amber-300 leading-snug">
+              <h3 className="text-sm font-bold text-slate-900 leading-snug">
                 ☕ Sıcak Çorba & Kahve İkramı Bildirimi
               </h3>
-              <p className="text-[11px] text-slate-300 leading-relaxed">
+              <p className="text-[11px] text-slate-600 leading-relaxed">
                 Gece sınav haftası boyunca <strong>23:30 - 01:00</strong> arasında Zemin Kat Yemekhanede ücretsiz sıcak çorba, taze çay ve filtre kahve ikramı servis edilmektedir.
               </p>
             </div>
 
-            <div className="pt-2 flex items-center justify-between text-[10px] text-slate-400 font-semibold border-t border-slate-800">
+            <div className="pt-2 flex items-center justify-between text-[10px] text-slate-500 font-semibold border-t border-slate-100">
               <span>📍 Zemin Kat Kafeterya</span>
-              <span className="text-amber-400 font-bold">Afiyet Olsun! 🍲</span>
+              <span className="text-blue-600 font-bold">Afiyet Olsun! 🍲</span>
             </div>
           </div>
         </div>
@@ -550,21 +550,21 @@ export default function HomePage() {
 
       {/* Banner */}
       {notificationBanner && (
-        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center justify-between shadow-sm animate-fade-in">
+        <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-900 text-xs font-semibold flex items-center justify-between shadow-sm animate-fade-in">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <CheckCircle2 className="w-4 h-4 text-blue-600" />
             <span>{notificationBanner}</span>
           </div>
           <button onClick={() => setNotificationBanner(null)}>
-            <X className="w-4 h-4 text-emerald-600" />
+            <X className="w-4 h-4 text-blue-600" />
           </button>
         </div>
       )}
 
       {/* DYNAMIC LIVE STATS BAR */}
       <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-          <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-900 border border-slate-200">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100">
             <BookOpen className="w-5 h-5" />
           </div>
           <div>
@@ -573,8 +573,8 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-          <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-700 border border-emerald-200">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100">
             <CheckCircle2 className="w-5 h-5" />
           </div>
           <div>
@@ -583,8 +583,8 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-          <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-700 border border-emerald-200">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100">
             <Layers className="w-5 h-5" />
           </div>
           <div>
@@ -595,8 +595,8 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-          <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center text-amber-700 border border-amber-200">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
