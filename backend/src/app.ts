@@ -15,49 +15,15 @@ dotenv.config();
 
 const app = express();
 
-// Explicit list of allowed origins for production & local development
-const allowedOrigins = [
-  'https://kutuphane-backend-alpha.vercel.app',
-  'https://kutuphane-otomasyonu-tr.vercel.app',
-  'https://frontend-beta-steel-52.vercel.app',
-  'http://localhost:3000',
-  'http://localhost:5000'
-];
-
-// Dynamic CORS origin handler for Vercel, Mobile PWA & WebView clients
+// Exact CORS configuration for production Vercel frontend & local development
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow mobile apps (no origin header), specified origins, or any .vercel.app subdomain
-      if (!origin || origin.includes('vercel.app') || allowedOrigins.includes(origin)) {
-        return callback(null, origin || true);
-      }
-      return callback(null, origin || true);
-    },
+    origin: ['https://kutuphane-otomasyonu-tr.vercel.app', 'http://localhost:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: [
-      'Content-Type',
-      'Authorization',
-      'X-Requested-With',
-      'Accept',
-      'Origin',
-      'Access-Control-Allow-Headers',
-      'Access-Control-Request-Method',
-      'Access-Control-Request-Headers'
-    ],
-    optionsSuccessStatus: 200
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
   })
 );
-
-// Enable pre-flight for all routes
-app.options('*', (req: Request, res: Response) => {
-  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With,Accept,Origin');
-  res.sendStatus(200);
-});
 
 app.use(express.json());
 
