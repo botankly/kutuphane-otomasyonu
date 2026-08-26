@@ -80,10 +80,11 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       }
     });
   } catch (error: any) {
+    console.error("REGISTER ERROR DETAILS:", error);
     res.status(500).json({
       status: 'error',
-      message: 'Kullanıcı kaydı sırasında sunucu hatası oluştu.',
-      error: error.message
+      message: 'Kullanıcı kaydı sırasında sunucu hatası oluştu. Lütfen Vercel panelinizde DATABASE_URL ve JWT_SECRET ortam değişkenlerini kontrol edin.',
+      error: error?.message || String(error)
     });
   }
 };
@@ -142,10 +143,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       }
     });
   } catch (error: any) {
+    console.error("LOGIN ERROR DETAILS:", error);
     res.status(500).json({
       status: 'error',
-      message: 'Giriş yapılırken sunucu hatası oluştu.',
-      error: error.message
+      message: 'Giriş yapılırken sunucu hatası oluştu. Lütfen Vercel panelinizde DATABASE_URL ve JWT_SECRET ortam değişkenlerini kontrol edin.',
+      error: error?.message || String(error)
     });
   }
 };
