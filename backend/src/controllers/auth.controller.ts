@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Role } from '../types/roles';
-import prisma from '../config/prisma';
+import prisma, { ensureSeedUsersExist } from '../config/prisma';
 import { hashPassword, comparePassword } from '../utils/password.util';
 import { generateToken } from '../utils/jwt.util';
 import { sendRegistrationEmail } from '../services/emailService';
@@ -8,6 +8,7 @@ import { createNotification } from './notification.controller';
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
+    await ensureSeedUsersExist();
     const { email, password, fullName, role } = req.body;
 
     if (!email || !password || !fullName) {
@@ -91,6 +92,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
+    await ensureSeedUsersExist();
     const { email, password } = req.body;
 
     if (!email || !password) {
