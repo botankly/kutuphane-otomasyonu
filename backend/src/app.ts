@@ -17,6 +17,7 @@ const app = express();
 
 // Explicit list of allowed origins for production & local development
 const allowedOrigins = [
+  'https://kutuphane-backend-alpha.vercel.app',
   'https://kutuphane-otomasyonu-tr.vercel.app',
   'https://frontend-beta-steel-52.vercel.app',
   'http://localhost:3000',
