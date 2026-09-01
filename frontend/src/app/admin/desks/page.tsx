@@ -334,10 +334,10 @@ export default function AdminDesksPage() {
         </div>
 
         {/* NAV TABS */}
-        <div className="flex items-center gap-2 border-b border-slate-200 pb-1">
+        <div className="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto scrollbar-none flex-nowrap w-full touch-pan-x text-xs">
           <button
             onClick={() => setAdminTab('desks')}
-            className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
+            className={`px-4 py-2.5 rounded-xl font-extrabold transition-all flex items-center gap-2 whitespace-nowrap flex-shrink-0 ${
               adminTab === 'desks'
                 ? 'bg-slate-900 text-white shadow-sm'
                 : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
@@ -348,7 +348,7 @@ export default function AdminDesksPage() {
           
           <button
             onClick={() => setAdminTab('study-rooms')}
-            className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
+            className={`px-4 py-2.5 rounded-xl font-extrabold transition-all flex items-center gap-2 whitespace-nowrap flex-shrink-0 ${
               adminTab === 'study-rooms'
                 ? 'bg-slate-900 text-white shadow-sm'
                 : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'

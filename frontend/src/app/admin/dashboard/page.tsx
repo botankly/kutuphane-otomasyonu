@@ -216,10 +216,10 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* ADMIN MANAGEMENT QUICK NAV TABS */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-slate-200">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 scrollbar-none flex-nowrap w-full touch-pan-x text-xs">
           <button
             onClick={() => setActiveSubTab('analytics')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs shadow-sm whitespace-nowrap transition-all ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold shadow-sm whitespace-nowrap transition-all flex-shrink-0 ${
               activeSubTab === 'analytics'
                 ? 'bg-slate-900 text-white'
                 : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
@@ -230,7 +230,7 @@ export default function AdminDashboardPage() {
           
           <button
             onClick={() => setActiveSubTab('risk')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs shadow-sm whitespace-nowrap transition-all ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold shadow-sm whitespace-nowrap transition-all flex-shrink-0 ${
               activeSubTab === 'risk'
                 ? 'bg-rose-950 text-rose-200 border border-rose-800'
                 : 'bg-white hover:bg-rose-50 text-rose-700 border border-rose-200'
@@ -241,19 +241,19 @@ export default function AdminDashboardPage() {
 
           <Link
             href="/admin/users"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-semibold text-xs border border-slate-200 transition-all whitespace-nowrap"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-semibold border border-slate-200 transition-all whitespace-nowrap flex-shrink-0"
           >
             <Users className="w-4 h-4 text-emerald-600" /> Üye / Öğrenci Yönetimi
           </Link>
           <Link
             href="/admin/desks"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-semibold text-xs border border-slate-200 transition-all whitespace-nowrap"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-semibold border border-slate-200 transition-all whitespace-nowrap flex-shrink-0"
           >
             <Building className="w-4 h-4 text-amber-600" /> Masa & Salon Yönetimi
           </Link>
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-semibold text-xs border border-slate-200 transition-all whitespace-nowrap"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-semibold border border-slate-200 transition-all whitespace-nowrap flex-shrink-0"
           >
             <BookOpen className="w-4 h-4 text-purple-600" /> Eser Envanteri
           </Link>

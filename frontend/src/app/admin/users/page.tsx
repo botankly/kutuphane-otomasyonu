@@ -262,10 +262,10 @@ export default function AdminUsersPage() {
               </div>
 
               {/* FILTER BUTTONS */}
-              <div className="flex flex-wrap items-center gap-1.5 text-xs">
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none flex-nowrap w-full touch-pan-x text-xs">
                 <button
                   onClick={() => setFilterType('ALL')}
-                  className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
+                  className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap flex-shrink-0 ${
                     filterType === 'ALL'
                       ? 'bg-slate-900 text-white shadow-sm'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
@@ -275,7 +275,7 @@ export default function AdminUsersPage() {
                 </button>
                 <button
                   onClick={() => setFilterType('LOANS')}
-                  className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
+                  className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap flex-shrink-0 ${
                     filterType === 'LOANS'
                       ? 'bg-blue-600 text-white shadow-sm'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
@@ -285,7 +285,7 @@ export default function AdminUsersPage() {
                 </button>
                 <button
                   onClick={() => setFilterType('DESK')}
-                  className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
+                  className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap flex-shrink-0 ${
                     filterType === 'DESK'
                       ? 'bg-emerald-600 text-white shadow-sm'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
@@ -295,7 +295,7 @@ export default function AdminUsersPage() {
                 </button>
                 <button
                   onClick={() => setFilterType('SUSPENDED')}
-                  className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
+                  className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap flex-shrink-0 ${
                     filterType === 'SUSPENDED'
                       ? 'bg-rose-600 text-white shadow-sm'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
