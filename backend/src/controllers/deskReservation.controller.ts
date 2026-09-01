@@ -456,18 +456,36 @@ export const checkOutDeskReservation = async (req: Request, res: Response): Prom
 
 export const addDeskByAdmin = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { roomId, deskNumber, xPosition, yPosition, hasPowerOutlet } = req.body;
+    let { roomId, roomName, floorName, deskNumber, xPosition, yPosition, hasPowerOutlet } = req.body;
+
+    if (!roomId && (roomName || floorName)) {
+      const targetName = String(roomName || floorName).trim();
+      let room = await prisma.room.findFirst({
+        where: { name: { equals: targetName, mode: 'insensitive' } }
+      });
+
+      if (!room) {
+        room = await prisma.room.create({
+          data: {
+            name: targetName,
+            capacity: 0,
+            description: `${targetName} Çalışma Alanı`
+          }
+        });
+      }
+      roomId = room.id;
+    }
 
     if (!roomId || !deskNumber) {
       res.status(400).json({
         status: 'error',
-        message: 'Salon seçimi ve Masa Numarası zorunludur.'
+        message: 'Salon / Kat seçimi ve Masa Numarası zorunludur.'
       });
       return;
     }
 
     const existingDesk = await prisma.desk.findFirst({
-      where: { roomId, deskNumber }
+      where: { roomId, deskNumber: String(deskNumber).trim() }
     });
 
     if (existingDesk) {

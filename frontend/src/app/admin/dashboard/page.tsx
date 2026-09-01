@@ -216,46 +216,53 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* ADMIN MANAGEMENT QUICK NAV TABS */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 scrollbar-none flex-nowrap w-full touch-pan-x text-xs">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 p-1.5 bg-slate-100 rounded-2xl border border-slate-200 w-full text-xs">
           <button
             onClick={() => setActiveSubTab('analytics')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold shadow-sm whitespace-nowrap transition-all flex-shrink-0 ${
+            className={`flex items-center justify-center gap-1.5 p-2 sm:px-3.5 sm:py-2.5 rounded-xl font-bold transition-all ${
               activeSubTab === 'analytics'
-                ? 'bg-slate-900 text-white'
-                : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
+                ? 'bg-slate-900 text-white shadow-sm'
+                : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80'
             }`}
           >
-            <BarChart3 className="w-4 h-4 text-blue-400" /> Genel Analitik & Metrikler
+            <BarChart3 className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />
+            <span className="truncate">İstatistikler & Metrikler</span>
           </button>
           
           <button
             onClick={() => setActiveSubTab('risk')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold shadow-sm whitespace-nowrap transition-all flex-shrink-0 ${
+            className={`flex items-center justify-center gap-1.5 p-2 sm:px-3.5 sm:py-2.5 rounded-xl font-bold transition-all ${
               activeSubTab === 'risk'
                 ? 'bg-rose-950 text-rose-200 border border-rose-800'
-                : 'bg-white hover:bg-rose-50 text-rose-700 border border-rose-200'
+                : 'bg-white hover:bg-rose-50 text-rose-700 border border-rose-200/80'
             }`}
           >
-            <Clock className="w-4 h-4 text-rose-500" /> Anomali & Kayıp Risk Analizi (15+ Gün)
+            <Clock className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" />
+            <span className="truncate">Anomali & Kayıp Risk</span>
           </button>
 
           <Link
             href="/admin/users"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-semibold border border-slate-200 transition-all whitespace-nowrap flex-shrink-0"
+            className="flex items-center justify-center gap-1.5 p-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold border border-slate-200/80 transition-all"
           >
-            <Users className="w-4 h-4 text-emerald-600" /> Üye / Öğrenci Yönetimi
+            <Users className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+            <span className="truncate">Öğrenci & Üye Takibi</span>
           </Link>
+
           <Link
             href="/admin/desks"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-semibold border border-slate-200 transition-all whitespace-nowrap flex-shrink-0"
+            className="flex items-center justify-center gap-1.5 p-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold border border-slate-200/80 transition-all"
           >
-            <Building className="w-4 h-4 text-amber-600" /> Masa & Salon Yönetimi
+            <Building className="w-3.5 h-3.5 text-blue-600 flex-shrink-0" />
+            <span className="truncate">Masa & Kat Yönetimi</span>
           </Link>
+
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-semibold border border-slate-200 transition-all whitespace-nowrap flex-shrink-0"
+            className="col-span-2 sm:col-auto flex items-center justify-center gap-1.5 p-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold border border-slate-200/80 transition-all"
           >
-            <BookOpen className="w-4 h-4 text-purple-600" /> Eser Envanteri
+            <BookOpen className="w-3.5 h-3.5 text-slate-700 flex-shrink-0" />
+            <span className="truncate">Kitap & Envanter Yönetimi</span>
           </Link>
         </div>
 

@@ -27,6 +27,8 @@ router.post('/reservations/:id/check-in', authenticateToken, checkInDeskReservat
 router.post('/reservations/:id/check-out', authenticateToken, checkOutDeskReservation);
 
 // Admin / Staff Management Endpoints
+router.post('/', authenticateToken, requireRole('ADMIN', 'LIBRARIAN'), addDeskByAdmin);
+router.delete('/:id', authenticateToken, requireRole('ADMIN', 'LIBRARIAN'), deleteDeskByAdmin);
 router.post('/admin/add', authenticateToken, requireRole('ADMIN', 'LIBRARIAN'), addDeskByAdmin);
 router.delete('/admin/:id', authenticateToken, requireRole('ADMIN', 'LIBRARIAN'), deleteDeskByAdmin);
 router.put('/admin/:id', authenticateToken, requireRole('ADMIN', 'LIBRARIAN'), updateDeskByAdmin);
