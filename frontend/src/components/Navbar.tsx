@@ -118,10 +118,10 @@ export default function Navbar() {
             <GraduationCap className="w-5 h-5 text-white" />
           </div>
           <div className="overflow-hidden">
-            <span className="text-sm sm:text-base font-bold text-white tracking-tight block leading-snug truncate max-w-[180px] xs:max-w-[240px] sm:max-w-none">
+            <span className="text-sm sm:text-base font-bold text-white tracking-tight block leading-snug">
               Üniversite Kütüphane Bilgi Sistemi
             </span>
-            <span className="hidden sm:block text-[10px] text-slate-400 font-medium tracking-wider uppercase truncate">
+            <span className="hidden md:block text-[10px] text-slate-400 font-medium tracking-wider uppercase truncate">
               Kütüphane & Dokümantasyon Daire Başkanlığı
             </span>
           </div>
@@ -201,7 +201,7 @@ export default function Navbar() {
 
                 {/* Dropdown Popover */}
                 {showBellDropdown && (
-                  <div className="absolute right-[-2.5rem] sm:right-0 mt-2 w-[calc(100vw-2rem)] max-w-sm sm:w-96 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden text-xs text-slate-900">
+                  <div className="fixed inset-x-4 top-16 md:absolute md:right-0 md:left-auto md:top-full md:w-80 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden text-xs text-slate-900 mt-2">
                     <div className="p-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Bell className="w-4 h-4 text-slate-900" />
