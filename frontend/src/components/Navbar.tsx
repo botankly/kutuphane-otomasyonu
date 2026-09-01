@@ -114,14 +114,14 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* University Logo & Branding */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm">
+          <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm flex-shrink-0">
             <GraduationCap className="w-5 h-5 text-white" />
           </div>
-          <div>
-            <span className="text-base font-bold text-white tracking-tight block leading-snug">
+          <div className="overflow-hidden">
+            <span className="text-sm sm:text-base font-bold text-white tracking-tight block leading-snug truncate max-w-[180px] xs:max-w-[240px] sm:max-w-none">
               Üniversite Kütüphane Bilgi Sistemi
             </span>
-            <span className="block text-[10px] text-slate-400 font-medium tracking-wider uppercase">
+            <span className="hidden sm:block text-[10px] text-slate-400 font-medium tracking-wider uppercase truncate">
               Kütüphane & Dokümantasyon Daire Başkanlığı
             </span>
           </div>
@@ -201,7 +201,7 @@ export default function Navbar() {
 
                 {/* Dropdown Popover */}
                 {showBellDropdown && (
-                  <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl border border-slate-200 shadow-xl z-50 overflow-hidden text-xs text-slate-900">
+                  <div className="absolute right-[-2.5rem] sm:right-0 mt-2 w-[calc(100vw-2rem)] max-w-sm sm:w-96 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden text-xs text-slate-900">
                     <div className="p-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Bell className="w-4 h-4 text-slate-900" />
